@@ -1,0 +1,18 @@
+{
+    "languages": [
+      {
+        "language": "EN",
+        "greeting": "Hello!"
+      },
+      {
+        "language": "DE",
+        "greeting": "Guten Tag!"
+      },
+      {
+        "language": "FR",
+        "greeting": "Bonjour!"
+      }
+    ]
+  }
+  
+  
