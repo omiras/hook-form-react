@@ -9,6 +9,8 @@ import { useForm } from "react-hook-form";
 import { Icon } from "@iconify/react";
 
 export const SignUp = ({ handleData }) => {
+  const [showPassword, setShowPassword] = useState(false);
+
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   function getInvalidPasswordError(password) {
     if (!/(?=.*[a-z])/.test(password)) {
@@ -29,7 +31,14 @@ export const SignUp = ({ handleData }) => {
     return null; // If no error is found, return null
   }
 
-  const [showPassword, setShowPassword] = useState(false);
+
+
+  function getInvalidDniError(dni) {
+    if (!/^[0-9]{8}[A-Z]$/i.test(dni)) {
+      return "Your ID card number must contain 7 digits and a final letter.";
+    }
+  }
+
 
   /* register your input into the hook by invoking the "register" function */
   /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
@@ -61,9 +70,8 @@ export const SignUp = ({ handleData }) => {
         <div className="flex flex-col gap-2">
           <label className="label-text">Email</label>
           <input
-            className={`input input-md input-bordered  ${
-              errors.email ? "input-error" : ""
-            }`}
+            className={`input input-md input-bordered  ${errors.email ? "input-error" : ""
+              }`}
             placeholder="Email"
             {...register("email", {
               //This is the validation
@@ -82,9 +90,8 @@ export const SignUp = ({ handleData }) => {
           <div className="flex flex-col relative">
             <input
               type={showPassword ? "text" : "password"}
-              className={`input input-md input-bordered w-full  ${
-                errors.password ? "input-error" : ""
-              }`}
+              className={`input input-md input-bordered w-full  ${errors.password ? "input-error" : ""
+                }`}
               placeholder="password"
               {...register("password", {
                 //This is the validation
@@ -122,11 +129,32 @@ export const SignUp = ({ handleData }) => {
             <option value="fr">fr</option>
           </select>
         </div>
+        {/* DNI */}
+        <div className="flex flex-col gap-2">
+          <label className="label-text">DNI</label>
+          <input
+            type="text"
+            className={`input input-md input-bordered w-full  ${errors.dni ? "input-error" : ""
+              }`}
+            placeholder="12345678A"
+            {...register("dni", {
+              //This is the validation
+              required: "Oye amigo, llena tu DNI",
+              validate: getInvalidDniError,
+            })}
+
+          />
+          {errors.dni && (
+            <span className="text-error"> {errors.dni.message}</span>
+          )}
+   
+        </div>
         <input
           className="btn bg-blue-400 text-black rounded w-fit place-self-center uppercase"
           type="submit"
           value="signup"
         />
+
       </form>
     </div>
   );
