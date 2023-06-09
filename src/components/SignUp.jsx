@@ -1,16 +1,14 @@
 //Make a new input for dni
 //Validate it with a regex
 //Show the dni on submitted
-//show an error if the dni is not valid
-//change the input border to red if the dni is not valid
+//Show an error if the dni is not valid
+//Change the input border to red if the dni is not valid
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Icon } from "@iconify/react";
-import json from "../lib/json.json";
 
-export const SignUp = () => {
-  console.log(json.languages);
+export const SignUp = ({ handleData }) => {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   function getInvalidPasswordError(password) {
     if (!/(?=.*[a-z])/.test(password)) {
@@ -32,7 +30,6 @@ export const SignUp = () => {
   }
 
   const [showPassword, setShowPassword] = useState(false);
-  const [submitted, setSubmitted] = useState();
 
   /* register your input into the hook by invoking the "register" function */
   /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
@@ -46,22 +43,14 @@ export const SignUp = () => {
   } = useForm();
 
   const onSubmit = (data) => {
+    handleData(data);
     console.log(data);
-    const greeting = json.languages.filter((language) => {
-      console.log(language.language);
-      console.log(data.language.toUpperCase());
-      return language.language === data.language.toUpperCase();
-    })[0].greeting;
-    setSubmitted(data);
   };
 
   // console.log(watch("example")); // watch input value by passing the name of it
 
   return (
-    <div
-      className="flex flex-col p-4 gap-5 place-content-center
-      place-items-center h-screen"
-    >
+    <div className="flex flex-col gap-3">
       <h1 className="text-2xl font-bold">Form</h1>
 
       <form
@@ -103,7 +92,7 @@ export const SignUp = () => {
                 validate: getInvalidPasswordError,
               })}
             />
-            <div
+            <button
               className="absolute top-3 right-5 cursor-pointer"
               onClick={() => setShowPassword(!showPassword)}
             >
@@ -112,7 +101,7 @@ export const SignUp = () => {
               ) : (
                 <Icon width={26} icon="iconoir:eye-close" />
               )}
-            </div>
+            </button>
             {errors.password?.type == "validate" && (
               <span className="text-error"> {errors.password.message}</span>
             )}
@@ -121,7 +110,7 @@ export const SignUp = () => {
 
         {/* Language---------------- */}
         <div className="flex flex-col gap-2">
-          <label className="label-text select-none">Language</label>
+          <label className="label-text">Language</label>
           <select
             {...register("language")}
             className="select select-bordered select-md"
@@ -139,18 +128,6 @@ export const SignUp = () => {
           value="signup"
         />
       </form>
-
-      {submitted && (
-        <div>
-          {
-            json.languages.filter(
-              (language) =>
-                language.language === submitted.language.toUpperCase()
-            )[0].greeting
-          }
-          <p>Your email is: {submitted.email}</p>
-        </div>
-      )}
     </div>
   );
 };
